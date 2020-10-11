@@ -1,0 +1,15 @@
+# 最先启动的服务
+spring:
+  application:
+    name: eureka-server
+  profiles: dev
+
+server:
+  port: 20000
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    hostname: localhost

@@ -1,0 +1,17 @@
+server:
+  port: 10002
+
+spring:
+  datasource:
+    # 数据源的相关配置 拆分数据源到不同的，或者独立的schema
+    url: jdbc:mysql://localhost:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+#    url: jdbc:mysql://localhost:3306/foodie-cloud-item?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    password: root
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
