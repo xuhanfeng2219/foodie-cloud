@@ -15,15 +15,18 @@
         <module name="foodie-item-pojo" />
         <module name="foodie-order-web" />
         <module name="foodie-user-mapper" />
+        <module name="foodie-cart-api" />
         <module name="foodie-cloud-common" />
+        <module name="foodie-order-api" />
         <module name="foodie-item-mapper" />
-        <module name="foodie-user-service" />
         <module name="foodie-cloud-shared-pojo" />
+        <module name="foodie-cart-web" />
         <module name="registry-center" />
+        <module name="foodie-cart-service" />
         <module name="foodie-order-service" />
         <module name="foodie-item-web" />
         <module name="foodie-user-api" />
-        <module name="foodie-order-api" />
+        <module name="foodie-user-service" />
         <module name="foodie-user-web" />
       </profile>
     </annotationProcessing>
