@@ -1,7 +1,9 @@
 package com.imooc.order.controller.center;
 
+import com.google.common.collect.Lists;
 import com.imooc.controller.BaseController;
 import com.imooc.enums.YesOrNo;
+import com.imooc.item.service.ItemCommentsService;
 import com.imooc.order.pojo.*;
 import com.imooc.order.pojo.bo.center.OrderItemsCommentBO;
 import com.imooc.order.service.center.MyCommentsService;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Api(value = "用户中心评价模块", tags = {"用户中心评价模块相关接口"})
@@ -22,7 +25,7 @@ import java.util.List;
 public class MyCommentsController extends BaseController {
 
     @Autowired
-    private MyCommentsService myCommentsService;
+    private ItemCommentsService myCommentsService;
 
     @Autowired
     private MyOrdersService myOrdersService;
@@ -46,9 +49,9 @@ public class MyCommentsController extends BaseController {
             return IMOOCJSONResult.errorMsg("该笔订单已经评价");
         }
 
-        List<OrderItems> list = myCommentsService.queryPendingComment(orderId);
+//        List<OrderItems> list = myCommentsService.queryPendingComment(orderId);
 
-        return IMOOCJSONResult.ok(list);
+        return IMOOCJSONResult.ok(Collections.emptyList());
     }
 
 
@@ -73,7 +76,7 @@ public class MyCommentsController extends BaseController {
             return IMOOCJSONResult.errorMsg("评论内容不能为空！");
         }
 
-        myCommentsService.saveComments(orderId, userId, commentList);
+//        myCommentsService.saveComments(orderId, userId, commentList);
         return IMOOCJSONResult.ok();
     }
 

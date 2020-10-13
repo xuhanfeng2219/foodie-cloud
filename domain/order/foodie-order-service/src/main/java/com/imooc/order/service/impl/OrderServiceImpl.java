@@ -72,9 +72,9 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setReceiverName(address.getReceiver());
         newOrder.setReceiverMobile(address.getMobile());
         newOrder.setReceiverAddress(address.getProvince() + " "
-                                    + address.getCity() + " "
-                                    + address.getDistrict() + " "
-                                    + address.getDetail());
+                + address.getCity() + " "
+                + address.getDistrict() + " "
+                + address.getDetail());
 
 //        newOrder.setTotalAmount();
 //        newOrder.setRealPayAmount();
@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 2. 循环根据itemSpecIds保存订单商品信息表
         String itemSpecIdArr[] = itemSpecIds.split(",");
-        Integer totalAmount = 0;    // 商品原价累计
+        int totalAmount = 0;    // 商品原价累计
         Integer realPayAmount = 0;  // 优惠后的实际支付价格累计
         for (String itemSpecId : itemSpecIdArr) {
 

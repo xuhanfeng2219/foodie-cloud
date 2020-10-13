@@ -3,8 +3,10 @@ package com.imooc.order.service.center;
 import com.imooc.order.pojo.Orders;
 import com.imooc.order.pojo.PagedGridResult;
 import com.imooc.order.pojo.vo.OrderStatusCountsVO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+@FeignClient("foodie-order-service")
 @RequestMapping("my-order-api")
 public interface MyOrdersService {
 

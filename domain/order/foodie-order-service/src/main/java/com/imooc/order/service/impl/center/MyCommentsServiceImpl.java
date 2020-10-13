@@ -38,7 +38,7 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
     public OrderStatusMapper orderStatusMapper;
 
     @Autowired
-    public ItemsCommentsMapperCustom itemsCommentsMapperCustom;
+    private MyCommentsService commentsService;
 
     @Autowired
     private Sid sid;
@@ -63,7 +63,7 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
         map.put("commentList", commentList);
-        itemsCommentsMapperCustom.saveComments(map);
+        commentsService.saveComments(orderId, userId, commentList);
 
         // 2. 修改订单表改已评价 orders
         Orders order = new Orders();
