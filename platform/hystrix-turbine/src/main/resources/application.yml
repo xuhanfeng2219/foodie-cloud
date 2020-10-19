@@ -1,0 +1,30 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+server:
+  port: 20001
+
+management:
+  port: 52001
+
+spring:
+  application:
+    name: hystrix-turbine
+
+turbine:
+  aggregator:
+  # cluster1,cluster2
+    clusterConfig: default
+  #可以配置多个以逗号隔开
+  app-config: foodie-order-service
+  # 集群名称为default
+  # eureka:instance:metadata-map: abcd-> imooc
+  # metadata['abcd']
+  cluster-name-expression: '"default"'
+  # 根据host+port的形式组合进行分区
+  combine-host-port: true
+  # 从哪个acturator的端点拉取方法调用信息
+  instanceUrlSuffix:
+    default: actuator/hystrix.stream

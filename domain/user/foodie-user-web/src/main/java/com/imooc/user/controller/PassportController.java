@@ -1,12 +1,14 @@
 package com.imooc.user.controller;
 
+import com.imooc.order.pojo.IMOOCJSONResult;
 import com.imooc.user.pojo.Users;
 import com.imooc.user.pojo.bo.UserBO;
 import com.imooc.user.service.UserService;
 import com.imooc.utils.CookieUtils;
-import com.imooc.order.pojo.IMOOCJSONResult;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.MD5Utils;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -92,6 +94,31 @@ public class PassportController {
 
     @ApiOperation(value = "用户登录", notes = "用户登录", httpMethod = "POST")
     @PostMapping("/login")
+    @HystrixCommand(
+            commandKey = "login", //全局唯一的标识符，默认函数名称
+            groupKey = "password", //全局服务分组，用于组织仪表盘，统计信息。默认值是类名
+            fallbackMethod = "loginFail",//执行当前类的一个方法可见度public private
+//            ignoreExceptions = {} //配置例外的情况，列表中exception不会触及降级
+            //线程相关的属性
+            threadPoolKey = "threadPoolA", //多个服务可以共用同一个线程组
+            threadPoolProperties = {
+                    //核心线程数
+                    @HystrixProperty(name = "coreSize", value = "20"),
+                    // size > 0 ,linkedBlockingQueue -> 请求等待队列
+                    // 默认为-1， SynchronousQueue->不存储元素的阻塞队列
+                    @HystrixProperty(name = "maxQueueSize", value = "20"),
+                    // maxQueueSize为-1的时候无效，队列没有达到maxQueueSize依然拒绝
+                    @HystrixProperty(name = "queueSizeRejectionThreshold", value = "20"),
+                    //（线程池）统计窗口的持续时间
+                    @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1024"),
+                    // 窗口内桶的数量
+                    @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "3"),
+            }
+//            ,
+//            commandProperties = {
+//                    // TODO: 2020/10/19 熔断的相关属性也可以放在这里
+//            }
+    )
     public IMOOCJSONResult login(@RequestBody UserBO userBO,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
@@ -107,7 +134,7 @@ public class PassportController {
 
         // 1. 实现登录
         Users userResult = userService.queryUserForLogin(username,
-                    MD5Utils.getMD5Str(password));
+                MD5Utils.getMD5Str(password));
 
         if (userResult == null) {
             return IMOOCJSONResult.errorMsg("用户名或密码不正确");
@@ -123,6 +150,13 @@ public class PassportController {
         // TODO 同步购物车数据
 
         return IMOOCJSONResult.ok(userResult);
+    }
+
+    private IMOOCJSONResult loginFail(UserBO userBO,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     Throwable throwable) throws Exception {
+        return IMOOCJSONResult.errorMsg("验证码输入错误！！！");
     }
 
     private Users setNullProperty(Users userResult) {

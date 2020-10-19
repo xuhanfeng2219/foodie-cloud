@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.imooc.controller.BaseController;
 import com.imooc.enums.YesOrNo;
 import com.imooc.item.service.ItemCommentsService;
+import com.imooc.order.fallback.itemservice.ItemCommentsFeignClient;
 import com.imooc.order.pojo.*;
 import com.imooc.order.pojo.bo.center.OrderItemsCommentBO;
 import com.imooc.order.service.center.MyCommentsService;
@@ -25,7 +26,8 @@ import java.util.List;
 public class MyCommentsController extends BaseController {
 
     @Autowired
-    private ItemCommentsService myCommentsService;
+//    private ItemCommentsService myCommentsService;
+    private ItemCommentsFeignClient myCommentsService;
 
     @Autowired
     private MyOrdersService myOrdersService;
@@ -44,7 +46,7 @@ public class MyCommentsController extends BaseController {
             return checkResult;
         }
         // 判断该笔订单是否已经评价过，评价过了就不再继续
-        Orders myOrder = (Orders)checkResult.getData();
+        Orders myOrder = (Orders) checkResult.getData();
         if (myOrder.getIsComment().equals(YesOrNo.YES.type)) {
             return IMOOCJSONResult.errorMsg("该笔订单已经评价");
         }
@@ -109,6 +111,7 @@ public class MyCommentsController extends BaseController {
 
     /**
      * 用于验证用户和订单是否有关联关系，避免非法用户调用
+     *
      * @return
      */
     public IMOOCJSONResult checkUserOrder(String userId, String orderId) {

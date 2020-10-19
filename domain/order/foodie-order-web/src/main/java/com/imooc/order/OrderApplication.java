@@ -1,5 +1,8 @@
 package com.imooc.order;
 
+import com.imooc.order.fallback.itemservice.ItemCommentsFeignClient;
+import com.imooc.user.service.AddressService;
+import com.imooc.user.service.UserService;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -14,7 +17,17 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "com.imooc.order.mapper")
 @ComponentScan(basePackages = {"com.imooc", "org.n3r.idworker"})
 @EnableScheduling
-@EnableFeignClients(basePackages = {"com.imooc.user","com.imooc.item"})
+@EnableFeignClients(
+        clients = {
+                ItemCommentsFeignClient.class,
+                AddressService.class,
+                UserService.class
+        }
+//        basePackages = {
+//        "com.imooc.user",
+//        "com.imooc.item",
+//        "com.imooc.order.fallback.itemservice"}
+        )
 public class OrderApplication {
 
     public static void main(String[] args) {
