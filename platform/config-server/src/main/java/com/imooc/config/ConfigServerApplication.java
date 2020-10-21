@@ -1,25 +1,18 @@
-package com.imooc.user;
+package com.imooc.config;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
-import org.springframework.context.annotation.ComponentScan;
-import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-
-@MapperScan(basePackages = "com.imooc.user.mapper")
-@ComponentScan(basePackages = {"com.imooc", "org.n3r.idworker"})
 @EnableDiscoveryClient
-@EnableCircuitBreaker
 @EnableConfigServer
-public class UserApplication {
+public class ConfigServerApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(UserApplication.class)
+        new SpringApplicationBuilder(ConfigServerApplication.class)
                 .web(WebApplicationType.SERVLET)
                 .run(args);
     }

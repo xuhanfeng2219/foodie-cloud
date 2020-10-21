@@ -22,6 +22,6 @@ import org.springframework.cloud.openfeign.FeignClient;
  *  优点：启动时直接扫包即可，不用指定加载接口，服务提供者不用额外配置
  *  缺点：任何情况下，服务调用者都需要声明一个额外的@FeignClients接口
  */
-@FeignClient("foodie-item-service")
+@FeignClient(value = "foodie-item-service", fallbackFactory = ItemCommentsFallbackFactory.class)
 public interface ItemCommentsFeignClient extends ItemCommentsService {
 }

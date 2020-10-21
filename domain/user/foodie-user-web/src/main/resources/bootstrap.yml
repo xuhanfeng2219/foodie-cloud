@@ -2,3 +2,14 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8080/eureka/
+
+# config的配置中心
+spring:
+  cloud:
+    config:
+      discovery:
+        enable: true
+        service-id: config-server
+      profile: dev
+      # 默认 master
+      label: master
