@@ -1,15 +1,13 @@
 package com.imooc.springcloud;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 2349
  */
 @FeignClient("auth-service")
+@RequestMapping("")
 public interface AuthService {
 
     @PostMapping("/login")
