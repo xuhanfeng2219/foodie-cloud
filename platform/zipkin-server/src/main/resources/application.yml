@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: zipkin-server
+  main:
+    allow-bean-definition-overriding: true
+  zipkin:
+    discoveryClientEnabled: true
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
+    base-url: http://ZIPKIN-SERVER/
+  sleuth:
+    sampler:
+      probability: 1
+
+server:
+  port: 20006
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false

@@ -11,6 +11,21 @@ spring:
     database: 0
     host: localhost
     port: 6379
+  zipkin:
+    discoveryClientEnabled: true
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
+
+    base-url: http://ZIPKIN-SERVER/
+    #以HTTP上传数据到zipkin
+    # 由于 bus依赖项导入了rabbitmq的依赖项，zipkin会默认使用mq
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
 
 mybatis:
   configuration:
