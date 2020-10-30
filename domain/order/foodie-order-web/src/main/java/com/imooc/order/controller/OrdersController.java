@@ -5,16 +5,19 @@ import com.imooc.enums.OrderStatusEnum;
 import com.imooc.enums.PayMethod;
 import com.imooc.order.pojo.IMOOCJSONResult;
 import com.imooc.order.pojo.OrderStatus;
+import com.imooc.order.pojo.bo.OrderStatusCheckBO;
 import com.imooc.order.pojo.bo.SubmitOrderBO;
 import com.imooc.order.pojo.vo.MerchantOrdersVO;
 import com.imooc.order.pojo.vo.OrderVO;
 import com.imooc.order.service.OrderService;
+import com.imooc.order.stream.topic.CheckOrderTopic;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,9 @@ public class OrdersController extends BaseController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private CheckOrderTopic orderCheckProducer;
 
     @ApiOperation(value = "用户下单", notes = "用户下单", httpMethod = "POST")
     @PostMapping("/create")
@@ -64,6 +70,15 @@ public class OrdersController extends BaseController {
          */
         // TODO 整合redis之后，完善购物车中的已结算商品清除，并且同步到前端的cookie
 //        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
+
+        //order status检查
+        OrderStatusCheckBO msg = new OrderStatusCheckBO();
+        msg.setOrderId(orderId);
+        //可以采用更短的delay时间，在consumer中重新投递
+        orderCheckProducer.output()
+                .send(MessageBuilder.withPayload(msg)
+                        .setHeader("x-delay", 3600 * 24 * 1000 + 300 * 1000)
+                        .build());
 
         // 3. 向支付中心发送当前订单，用于保存支付中心的订单数据
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();

@@ -18,7 +18,11 @@ public class Account implements Serializable {
 
     private String username;
 
+    private String userId;
+
     private String token;
 
     private String refreshToken;
+
+    private boolean isSkipVerification = false;
 }

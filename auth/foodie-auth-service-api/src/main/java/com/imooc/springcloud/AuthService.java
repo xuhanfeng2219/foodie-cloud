@@ -24,4 +24,8 @@ public interface AuthService {
     public AuthResponse refresh(@RequestParam("username") String username,
                                 @RequestParam("token") String token);
 
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public AuthResponse delete(@RequestBody Account account);
+
 }

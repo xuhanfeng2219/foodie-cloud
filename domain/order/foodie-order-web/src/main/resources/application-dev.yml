@@ -11,6 +11,21 @@ spring:
     database: 0
     host: localhost
     port: 6379
+  #延迟消息
+  cloud:
+    stream:
+      bindings:
+        check-order-consumer:
+          destination: check-order-topic
+          group: order-group
+        check-order-producer:
+          destination: check-order-topic
+      rabbit:
+        bindings:
+          check-order-producer:
+            producer:
+              delayed-exchange: true
+
 
 # feign的超时判定
 feign:

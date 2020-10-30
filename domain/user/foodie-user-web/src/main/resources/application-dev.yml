@@ -17,6 +17,17 @@ spring:
     locator:
       discovery:
         enabled: true
+  #stream 配置
+  cloud:
+    stream:
+      bindings:
+        force-logout-consumer:
+          destination: force-logout-topic
+          group: force-logout-group
+          consumer:
+            max-attempts: 2
+        force-logout-producer:
+          detination: force-logout-topic
 
     base-url: http://ZIPKIN-SERVER/
     #以HTTP上传数据到zipkin
