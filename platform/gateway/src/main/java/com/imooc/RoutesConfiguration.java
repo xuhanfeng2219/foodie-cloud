@@ -1,5 +1,6 @@
 package com.imooc;
 
+import com.imooc.filter.AuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
@@ -27,8 +28,11 @@ public class RoutesConfiguration {
     private RedisRateLimiter redisRateLimiterItem;
 
     @Bean
-    public RouteLocator routes(RouteLocatorBuilder builder) {
+    public RouteLocator routes(RouteLocatorBuilder builder, AuthFilter authFilter) {
         return builder.routes()
+                .route(r -> r.path("address/list")
+                        .filters(f -> f.filter(authFilter))
+                        .uri("lb://FOODIE-USER-SERVICE"))
                 .route(r -> r.path("address/**", "passport/**", "userInfo/**")
                         .filters(f -> f.requestRateLimiter(
                                 config -> {

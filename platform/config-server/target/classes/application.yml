@@ -1,0 +1,38 @@
+server:
+  port: 20003
+
+spring:
+  application:
+    name: config-server
+
+  cloud:
+    config:
+      server:
+        # 属性重载
+        overrides:
+          test: mytest
+        git:
+          uri: http://github/xuhanfeng2219/foodie-cloud-config.git
+          force-pull: true
+          # 将配置文件放到接入方服务名称对应的文件夹下面
+          search-paths: '{application}'
+#          username: xuhanfeng2219
+#          password: wenmang1989
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+# 开启所有的actuator-endpoint
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # include: healthy,info,xxx自己需要的放开的服务
+        include: '*'
+    security:
+      enabled: false

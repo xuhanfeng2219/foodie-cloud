@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("passport")
 public class PassportController {
 
+    @Qualifier("foodie-user-service")
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    @Qualifier("foodie-auth-service")
+//    private Authservice authservice;
 
     @ApiOperation(value = "用户名是否存在", notes = "用户名是否存在", httpMethod = "GET")
     @GetMapping("/usernameIsExist")

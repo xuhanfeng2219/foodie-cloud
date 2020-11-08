@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 
 
 /**
- * 
+ *
  * @Title: CookieUtils.java
  * @Package com.imooc.utils
  * @Description: Cookie 工具类
@@ -25,9 +25,9 @@ import java.net.URLEncoder;
 public final class CookieUtils {
 
     final static Logger logger = LoggerFactory.getLogger(CookieUtils.class);
-	
+
 	/**
-	 * 
+	 *
 	 * @Description: 得到Cookie的值, 不编码
 	 * @param request
 	 * @param cookieName
@@ -36,9 +36,9 @@ public final class CookieUtils {
     public static String getCookieValue(HttpServletRequest request, String cookieName) {
         return getCookieValue(request, cookieName, false);
     }
-    
+
     /**
-     * 
+     *
      * @Description: 得到Cookie的值
      * @param request
      * @param cookieName
@@ -69,7 +69,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 得到Cookie的值
      * @param request
      * @param cookieName
@@ -96,7 +96,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 设置Cookie的值 不设置生效时间默认浏览器关闭即失效,也不编码
      * @param request
      * @param response
@@ -109,7 +109,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 设置Cookie的值 在指定时间内生效,但不编码
      * @param request
      * @param response
@@ -123,7 +123,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 设置Cookie的值 不设置生效时间,但编码
      * 在服务器被创建，返回给客户端，并且保存客户端
      * 如果设置了SETMAXAGE(int seconds)，会把cookie保存在客户端的硬盘中
@@ -141,7 +141,7 @@ public final class CookieUtils {
     }
 
    /**
-    * 
+    *
     * @Description: 设置Cookie的值 在指定时间内生效, 编码参数
     * @param request
     * @param response
@@ -156,7 +156,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 设置Cookie的值 在指定时间内生效, 编码参数(指定编码)
      * @param request
      * @param response
@@ -171,7 +171,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 删除Cookie带cookie域名
      * @param request
      * @param response
@@ -183,9 +183,9 @@ public final class CookieUtils {
 //        doSetCookie(request, response, cookieName, "", -1, false);
     }
 
-    
+
     /**
-     * 
+     *
      * @Description: 设置Cookie的值，并使其在指定时间内生效
      * @param request
      * @param response
@@ -206,7 +206,9 @@ public final class CookieUtils {
             if (cookieMaxage > 0)
                 cookie.setMaxAge(cookieMaxage);
             if (null != request) {// 设置域名的cookie
-            	String domainName = getDomainName(request);
+                // FIXME: 2020/10/27 这里域名改成相应的localhost 仅限本地访问，上线时需要调整回来
+//            	String domainName = getDomainName(request);
+                String domainName = "localhost";
                 logger.info("========== domainName: {} ==========", domainName);
                 if (!"localhost".equals(domainName)) {
                 	cookie.setDomain(domainName);
@@ -220,7 +222,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 设置Cookie的值，并使其在指定时间内生效
      * @param request
      * @param response
@@ -255,7 +257,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 
+     *
      * @Description: 得到cookie的域名
      * @return
      */
@@ -289,29 +291,29 @@ public final class CookieUtils {
         }
         return domainName;
     }
-    
-    public static String trimSpaces(String IP){//去掉IP字符串前后所有的空格  
-        while(IP.startsWith(" ")){  
-               IP= IP.substring(1,IP.length()).trim();  
-            }  
-        while(IP.endsWith(" ")){  
-               IP= IP.substring(0,IP.length()-1).trim();  
-            }  
-        return IP;  
-    }  
-    
-    public static boolean isIp(String IP){//判断是否是一个IP  
-        boolean b = false;  
-        IP = trimSpaces(IP);  
-        if(IP.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")){  
-            String s[] = IP.split("\\.");  
-            if(Integer.parseInt(s[0])<255)  
-                if(Integer.parseInt(s[1])<255)  
-                    if(Integer.parseInt(s[2])<255)  
-                        if(Integer.parseInt(s[3])<255)  
-                            b = true;  
-        }  
-        return b;  
-    }  
+
+    public static String trimSpaces(String IP){//去掉IP字符串前后所有的空格
+        while(IP.startsWith(" ")){
+               IP= IP.substring(1,IP.length()).trim();
+            }
+        while(IP.endsWith(" ")){
+               IP= IP.substring(0,IP.length()-1).trim();
+            }
+        return IP;
+    }
+
+    public static boolean isIp(String IP){//判断是否是一个IP
+        boolean b = false;
+        IP = trimSpaces(IP);
+        if(IP.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")){
+            String s[] = IP.split("\\.");
+            if(Integer.parseInt(s[0])<255)
+                if(Integer.parseInt(s[1])<255)
+                    if(Integer.parseInt(s[2])<255)
+                        if(Integer.parseInt(s[3])<255)
+                            b = true;
+        }
+        return b;
+    }
 
 }
