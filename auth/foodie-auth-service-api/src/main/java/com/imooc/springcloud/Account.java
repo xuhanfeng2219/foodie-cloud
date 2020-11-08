@@ -21,4 +21,6 @@ public class Account implements Serializable {
     private String token;
 
     private String refreshToken;
+
+    private String userId;
 }

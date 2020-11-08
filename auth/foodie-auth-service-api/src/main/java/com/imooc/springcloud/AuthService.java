@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author 2349
  */
-@FeignClient("auth-service")
-@RequestMapping("")
+@FeignClient("foodie-auth-service")
+@RequestMapping("auth-service")
 public interface AuthService {
 
     @PostMapping("/login")
@@ -23,5 +23,8 @@ public interface AuthService {
     @ResponseBody
     public AuthResponse refresh(@RequestParam("username") String username,
                                 @RequestParam("token") String token);
+
+    @DeleteMapping("/delete")
+    public AuthResponse delete(@RequestBody Account account);
 
 }
