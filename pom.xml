@@ -38,6 +38,7 @@
         <module>platform/gateway</module>
         <module>auth/auth-service-api</module>
         <module>auth/auth-service</module>
+        <module>platform/zipkin-server</module>
     </modules>
     <packaging>pom</packaging>
 

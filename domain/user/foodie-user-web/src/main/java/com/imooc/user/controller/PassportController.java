@@ -4,6 +4,7 @@ import com.imooc.order.pojo.IMOOCJSONResult;
 import com.imooc.user.pojo.Users;
 import com.imooc.user.pojo.bo.UserBO;
 import com.imooc.user.service.UserService;
+import com.imooc.user.stream.ForceLogoutTopic;
 import com.imooc.utils.CookieUtils;
 import com.imooc.utils.JsonUtils;
 import com.imooc.utils.MD5Utils;
@@ -11,9 +12,10 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @Api(value = "注册登录", tags = {"用于注册登录的相关接口"})
 @RestController
 @RequestMapping("passport")
+@Slf4j
 public class PassportController {
 
     @Qualifier("foodie-user-service")
@@ -175,7 +178,6 @@ public class PassportController {
         return userResult;
     }
 
-
     @ApiOperation(value = "用户退出登录", notes = "用户退出登录", httpMethod = "POST")
     @PostMapping("/logout")
     public IMOOCJSONResult logout(@RequestParam String userId,
@@ -184,6 +186,30 @@ public class PassportController {
 
         // 清除用户的相关信息的cookie
         CookieUtils.deleteCookie(request, response, "user");
+
+        // TODO 用户退出登录，需要清空购物车
+        // TODO 分布式会话中需要清除用户数据
+
+        return IMOOCJSONResult.ok();
+    }
+
+    @Autowired
+    private ForceLogoutTopic producer;
+
+    // FIXME: 2020/10/29 将这个接口从网关层删除掉
+    @ApiOperation(value = "用户强制退出登录", notes = "用户强制退出登录", httpMethod = "POST")
+    @PostMapping("/forceLogout")
+    public IMOOCJSONResult forceLogout(@RequestParam String userId) {
+
+        if (StringUtils.isNotBlank(userId)) {
+            for (String user: StringUtils.split(userId, ",")) {
+                log.info("send logout message success, userId = {}", user);
+                producer.output().send(MessageBuilder.withPayload(user).build());
+            }
+        }
+
+        // 清除用户的相关信息的cookie
+//        CookieUtils.deleteCookie(request, response, "user");
 
         // TODO 用户退出登录，需要清空购物车
         // TODO 分布式会话中需要清除用户数据
